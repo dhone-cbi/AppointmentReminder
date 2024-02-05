@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34302.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentReminderService", "AppointmentReminderService\AppointmentReminderService.csproj", "{098E2C76-8440-40B8-BC64-204B76D04BE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentReminderSettings", "AppointmentReminderSettings\AppointmentReminderSettings.csproj", "{A7097567-61A5-486C-88D1-E753E8C6E7DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentReminder", "AppointmentReminder\AppointmentReminder.csproj", "{C8986755-1898-450D-B5B8-B79ACBEDF16E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{098E2C76-8440-40B8-BC64-204B76D04BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{098E2C76-8440-40B8-BC64-204B76D04BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{098E2C76-8440-40B8-BC64-204B76D04BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{098E2C76-8440-40B8-BC64-204B76D04BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7097567-61A5-486C-88D1-E753E8C6E7DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7097567-61A5-486C-88D1-E753E8C6E7DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7097567-61A5-486C-88D1-E753E8C6E7DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7097567-61A5-486C-88D1-E753E8C6E7DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8986755-1898-450D-B5B8-B79ACBEDF16E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8986755-1898-450D-B5B8-B79ACBEDF16E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8986755-1898-450D-B5B8-B79ACBEDF16E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8986755-1898-450D-B5B8-B79ACBEDF16E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88DAB855-DF6A-4681-8A02-93CACC6CF8D4}
+	EndGlobalSection
+EndGlobal
