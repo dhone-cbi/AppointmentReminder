@@ -30,15 +30,15 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtApplicationID = new System.Windows.Forms.TextBox();
-            this.txtTenantID = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.btnReload = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.txtClientSecret = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.cbNewKey = new System.Windows.Forms.CheckBox();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnRevert = new System.Windows.Forms.Button();
+            this.txtTenantID = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtApplicationID = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnClear = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,9 +54,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnRevert);
+            this.groupBox1.Controls.Add(this.btnClear);
+            this.groupBox1.Controls.Add(this.btnReload);
             this.groupBox1.Controls.Add(this.btnSave);
-            this.groupBox1.Controls.Add(this.cbNewKey);
             this.groupBox1.Controls.Add(this.txtClientSecret);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtTenantID);
@@ -65,42 +65,30 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(483, 319);
+            this.groupBox1.Size = new System.Drawing.Size(483, 280);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Microsoft Graph Credentials";
             // 
-            // label1
+            // btnReload
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 34);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Application ID";
+            this.btnReload.Location = new System.Drawing.Point(112, 211);
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Size = new System.Drawing.Size(107, 35);
+            this.btnReload.TabIndex = 8;
+            this.btnReload.Text = "Reload";
+            this.btnReload.UseVisualStyleBackColor = true;
+            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
             // 
-            // txtApplicationID
+            // btnSave
             // 
-            this.txtApplicationID.Location = new System.Drawing.Point(19, 53);
-            this.txtApplicationID.Name = "txtApplicationID";
-            this.txtApplicationID.Size = new System.Drawing.Size(399, 22);
-            this.txtApplicationID.TabIndex = 1;
-            // 
-            // txtTenantID
-            // 
-            this.txtTenantID.Location = new System.Drawing.Point(19, 111);
-            this.txtTenantID.Name = "txtTenantID";
-            this.txtTenantID.Size = new System.Drawing.Size(399, 22);
-            this.txtTenantID.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 92);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 16);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Tenant ID";
+            this.btnSave.Location = new System.Drawing.Point(19, 211);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(87, 35);
+            this.btnSave.TabIndex = 7;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtClientSecret
             // 
@@ -119,33 +107,47 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Client Secret";
             // 
-            // cbNewKey
+            // txtTenantID
             // 
-            this.cbNewKey.AutoSize = true;
-            this.cbNewKey.Location = new System.Drawing.Point(19, 218);
-            this.cbNewKey.Name = "cbNewKey";
-            this.cbNewKey.Size = new System.Drawing.Size(178, 20);
-            this.cbNewKey.TabIndex = 6;
-            this.cbNewKey.Text = "Generate new key and IV";
-            this.cbNewKey.UseVisualStyleBackColor = true;
+            this.txtTenantID.Location = new System.Drawing.Point(19, 111);
+            this.txtTenantID.Name = "txtTenantID";
+            this.txtTenantID.Size = new System.Drawing.Size(399, 22);
+            this.txtTenantID.TabIndex = 3;
             // 
-            // btnSave
+            // label2
             // 
-            this.btnSave.Location = new System.Drawing.Point(19, 255);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(87, 35);
-            this.btnSave.TabIndex = 7;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 92);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 16);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Tenant ID";
             // 
-            // btnRevert
+            // txtApplicationID
             // 
-            this.btnRevert.Location = new System.Drawing.Point(112, 255);
-            this.btnRevert.Name = "btnRevert";
-            this.btnRevert.Size = new System.Drawing.Size(107, 35);
-            this.btnRevert.TabIndex = 8;
-            this.btnRevert.Text = "Revert";
-            this.btnRevert.UseVisualStyleBackColor = true;
+            this.txtApplicationID.Location = new System.Drawing.Point(19, 53);
+            this.txtApplicationID.Name = "txtApplicationID";
+            this.txtApplicationID.Size = new System.Drawing.Size(399, 22);
+            this.txtApplicationID.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Application ID";
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(225, 211);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(107, 35);
+            this.btnClear.TabIndex = 9;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // FormMain
             // 
@@ -172,9 +174,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtApplicationID;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox cbNewKey;
-        private System.Windows.Forms.Button btnRevert;
+        private System.Windows.Forms.Button btnReload;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 
