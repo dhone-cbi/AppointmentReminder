@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Graph;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace AppointmentReminder
 
         public SqlConnection SqlConnection { get { return sqlConnection; } }
 
+        GraphServiceClient GraphClient { get; set; }
 
         public AppointmentReminderEngine() 
         { 

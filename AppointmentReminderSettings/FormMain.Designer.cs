@@ -158,6 +158,7 @@
             this.Controls.Add(this.button1);
             this.Name = "FormMain";
             this.Text = "Appointment Reminder Settings";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

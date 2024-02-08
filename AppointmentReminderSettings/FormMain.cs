@@ -11,12 +11,19 @@ using AppointmentReminder;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using System.CodeDom;
+using Microsoft.Graph;
+using Azure.Identity;
 
 namespace AppointmentReminderSettings
 {
     public partial class FormMain : Form
     {
         public const string GraphCredentialsKey = @"Software\CBI\AppointmentReminder\GraphCredentials";
+        public const string GraphURL = "https://graph.microsoft.com/.default";
+
+        public GraphServiceClient graphClient;
+        
+
         public FormMain()
         {
             InitializeComponent();
@@ -24,23 +31,7 @@ namespace AppointmentReminderSettings
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string str = "Hello";
-
-            byte[] bytes = Encoding.Unicode.GetBytes(str);
-
-            byte[] encryptedBytes = ProtectedData.Protect(bytes, null, DataProtectionScope.LocalMachine);
-
-            string encryptedB64 = Convert.ToBase64String(encryptedBytes);
-
-            MessageBox.Show(encryptedB64);
-
-            byte[] decodedB64 = Convert.FromBase64String(encryptedB64);
-
-            byte[] decryptedBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.LocalMachine);
-
-            string decryptedString = Encoding.Unicode.GetString(decryptedBytes);
-
-            MessageBox.Show(decryptedString);
+            
 
         }
 
@@ -65,16 +56,18 @@ namespace AppointmentReminderSettings
             //string tenantIdEncryptedB64 = Convert.ToBase64String(tenantIdEncrypted);
             //string clientSecretEncryptedB64 = Convert.ToBase64String(clientSecretEncrypted);
 
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey, true);
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(GraphCredentialsKey, true);
 
             if (key == null)
-                key = Registry.CurrentUser.CreateSubKey(GraphCredentialsKey, true);
+                key = Registry.LocalMachine.CreateSubKey(GraphCredentialsKey, true);
 
             key.SetValue("ApplicationID", applicationIdEncrypted);
             key.SetValue("TenantID", tenantIdEncrypted);
             key.SetValue("ClientSecret", clientSecretEncrypted);
 
             key.Close();
+
+            InitializeInterfaces();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -86,7 +79,7 @@ namespace AppointmentReminderSettings
 
         private void btnReload_Click(object sender, EventArgs e)
         {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey);
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(GraphCredentialsKey);
 
             if (key == null) 
                 return;
@@ -113,7 +106,27 @@ namespace AppointmentReminderSettings
                 txtApplicationID.Text = applicationID;
                 txtTenantID.Text = tenantID;
                 txtClientSecret.Text = clientSecret;
+
+                InitializeInterfaces();
             }
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            btnReload_Click(sender, e);
+
+            InitializeInterfaces();
+        }
+
+        private void InitializeInterfaces()
+        {
+            string applicationID = txtApplicationID.Text;
+            string tenantID = txtTenantID.Text;
+            string clientSecret = txtClientSecret.Text;
+
+            string[] scopes = { GraphURL };
+            ClientSecretCredential clientSecretCredential = new ClientSecretCredential(tenantID, applicationID, clientSecret);
+            graphClient = new GraphServiceClient(clientSecretCredential);
         }
     }
 }
