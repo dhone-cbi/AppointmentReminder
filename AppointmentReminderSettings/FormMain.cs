@@ -13,6 +13,8 @@ using Microsoft.Win32;
 using System.CodeDom;
 using Microsoft.Graph;
 using Azure.Identity;
+using Microsoft.Graph.Models;
+using Microsoft.Graph.Users.Item.SendMail;
 
 namespace AppointmentReminderSettings
 {
@@ -29,10 +31,24 @@ namespace AppointmentReminderSettings
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            
-
+            AppointmentInfo info = new AppointmentInfo()
+            {
+                AppointmentDate = "2/8/2024",
+                AppointmentTime = "8:00 AM",
+                Language = "Spanish",
+                Address = "1234 Test Ln",
+                City = "Phoenix",
+                State = "AZ",
+                Zip = "85021",
+                CellPhone = "6233129573"
+            };
+            AppointmentReminderEngine reminderEngine = new AppointmentReminderEngine()
+            {
+                GraphClient = graphClient
+            };
+            reminderEngine.SendReminderEmail(info);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
