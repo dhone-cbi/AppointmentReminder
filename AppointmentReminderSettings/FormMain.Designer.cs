@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.components = new System.ComponentModel.Container();
+            this.btnSendReminders = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnReload = new System.Windows.Forms.Button();
@@ -39,18 +40,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtApplicationID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // btnSendReminders
             // 
-            this.button1.Location = new System.Drawing.Point(680, 69);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnSendReminders.Location = new System.Drawing.Point(501, 12);
+            this.btnSendReminders.Name = "btnSendReminders";
+            this.btnSendReminders.Size = new System.Drawing.Size(150, 32);
+            this.btnSendReminders.TabIndex = 0;
+            this.btnSendReminders.Text = "Send Reminders";
+            this.btnSendReminders.UseVisualStyleBackColor = true;
+            this.btnSendReminders.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox1
             // 
@@ -149,13 +151,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Application ID";
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 450);
+            this.ClientSize = new System.Drawing.Size(766, 440);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSendReminders);
             this.Name = "FormMain";
             this.Text = "Appointment Reminder Settings";
             this.Load += new System.EventHandler(this.FormMain_Load);
@@ -167,7 +173,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSendReminders;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtClientSecret;
         private System.Windows.Forms.Label label3;
@@ -178,6 +184,7 @@
         private System.Windows.Forms.Button btnReload;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

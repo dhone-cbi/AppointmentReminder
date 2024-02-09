@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using AppointmentReminder;
-using System.Security.Cryptography;
-using Microsoft.Win32;
-using System.CodeDom;
-using Microsoft.Graph;
+﻿using AppointmentReminder;
 using Azure.Identity;
-using Microsoft.Graph.Models;
-using Microsoft.Graph.Users.Item.SendMail;
+using Microsoft.Graph;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace AppointmentReminderSettings
 {
@@ -24,6 +17,7 @@ namespace AppointmentReminderSettings
         public const string GraphURL = "https://graph.microsoft.com/.default";
 
         public GraphServiceClient graphClient;
+        public AppointmentReminderEngine appointmentReminderEngine;
         
 
         public FormMain()
@@ -44,16 +38,18 @@ namespace AppointmentReminderSettings
                 Zip = "85021",
                 CellPhone = "6233129573"
             };*/
-            AppointmentReminderEngine reminderEngine = new AppointmentReminderEngine()
-            {
-                GraphClient = graphClient
-            };
+
             //reminderEngine.SendReminderEmail(info);
             //info.ReminderSentTime = DateTime.Now;
             //reminderEngine.WriteReminderLog(info, null);
 
-            IEnumerable<AppointmentInfo> list = reminderEngine.GetAppointments();
-            reminderEngine.SendReminders(list);
+            SendReminders();  
+        }
+
+        private void SendReminders()
+        {
+            IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
+            appointmentReminderEngine.SendReminders(list);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -137,6 +133,19 @@ namespace AppointmentReminderSettings
             btnReload_Click(sender, e);
 
             InitializeInterfaces();
+
+            DateTime scheduledTime = DateTime.Today.AddHours(11);
+
+            
+            if (scheduledTime.Subtract(DateTime.Now).TotalMilliseconds < 0)
+                scheduledTime = scheduledTime.AddDays(1);
+
+
+            double interval = (scheduledTime - DateTime.Now).TotalMilliseconds;
+
+            timer1.Interval = (int)interval;
+            timer1.Start();
+
         }
 
         private void InitializeInterfaces()
@@ -148,6 +157,16 @@ namespace AppointmentReminderSettings
             string[] scopes = { GraphURL };
             ClientSecretCredential clientSecretCredential = new ClientSecretCredential(tenantID, applicationID, clientSecret);
             graphClient = new GraphServiceClient(clientSecretCredential);
+
+            appointmentReminderEngine = new AppointmentReminderEngine()
+            {
+                GraphClient = graphClient
+            };
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Interval = 24 * 60 * 60 * 1000;
         }
     }
 }
