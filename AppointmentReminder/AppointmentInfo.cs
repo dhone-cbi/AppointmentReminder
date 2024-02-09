@@ -19,6 +19,7 @@ namespace AppointmentReminder
         public string State { get; set; }
         public string Zip { get; set; }
         public string Language { get; set; }
+        public DateTime? ReminderSentTime { get; set; }
 
     }
 }

@@ -30,6 +30,7 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnClear = new System.Windows.Forms.Button();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.txtClientSecret = new System.Windows.Forms.TextBox();
@@ -38,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtApplicationID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnClear = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,16 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Microsoft Graph Credentials";
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(225, 211);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(107, 35);
+            this.btnClear.TabIndex = 9;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnReload
             // 
@@ -139,21 +149,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Application ID";
             // 
-            // btnClear
-            // 
-            this.btnClear.Location = new System.Drawing.Point(225, 211);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(107, 35);
-            this.btnClear.TabIndex = 9;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1008, 450);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Name = "FormMain";

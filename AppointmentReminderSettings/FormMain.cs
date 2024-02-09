@@ -33,7 +33,7 @@ namespace AppointmentReminderSettings
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            AppointmentInfo info = new AppointmentInfo()
+            /*AppointmentInfo info = new AppointmentInfo()
             {
                 AppointmentDate = "2/8/2024",
                 AppointmentTime = "8:00 AM",
@@ -43,12 +43,17 @@ namespace AppointmentReminderSettings
                 State = "AZ",
                 Zip = "85021",
                 CellPhone = "6233129573"
-            };
+            };*/
             AppointmentReminderEngine reminderEngine = new AppointmentReminderEngine()
             {
                 GraphClient = graphClient
             };
-            reminderEngine.SendReminderEmail(info);
+            //reminderEngine.SendReminderEmail(info);
+            //info.ReminderSentTime = DateTime.Now;
+            //reminderEngine.WriteReminderLog(info, null);
+
+            IEnumerable<AppointmentInfo> list = reminderEngine.GetAppointments();
+            reminderEngine.SendReminders(list);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
