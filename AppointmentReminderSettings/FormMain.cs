@@ -73,10 +73,10 @@ namespace AppointmentReminderSettings
             //string tenantIdEncryptedB64 = Convert.ToBase64String(tenantIdEncrypted);
             //string clientSecretEncryptedB64 = Convert.ToBase64String(clientSecretEncrypted);
 
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(GraphCredentialsKey, true);
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey, true);
 
             if (key == null)
-                key = Registry.LocalMachine.CreateSubKey(GraphCredentialsKey, true);
+                key = Registry.CurrentUser.CreateSubKey(GraphCredentialsKey, true);
 
             key.SetValue("ApplicationID", applicationIdEncrypted);
             key.SetValue("TenantID", tenantIdEncrypted);
@@ -96,7 +96,7 @@ namespace AppointmentReminderSettings
 
         private void btnReload_Click(object sender, EventArgs e)
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(GraphCredentialsKey);
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey);
 
             if (key == null) 
                 return;
@@ -154,19 +154,28 @@ namespace AppointmentReminderSettings
             string tenantID = txtTenantID.Text;
             string clientSecret = txtClientSecret.Text;
 
-            string[] scopes = { GraphURL };
-            ClientSecretCredential clientSecretCredential = new ClientSecretCredential(tenantID, applicationID, clientSecret);
-            graphClient = new GraphServiceClient(clientSecretCredential);
-
-            appointmentReminderEngine = new AppointmentReminderEngine()
+            try
             {
-                GraphClient = graphClient
-            };
+                string[] scopes = { GraphURL };
+                ClientSecretCredential clientSecretCredential = new ClientSecretCredential(tenantID, applicationID, clientSecret);
+                graphClient = new GraphServiceClient(clientSecretCredential);
+
+                appointmentReminderEngine = new AppointmentReminderEngine()
+                {
+                    GraphClient = graphClient
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error initializing interfaces.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Interval = 24 * 60 * 60 * 1000;
+
+            SendReminders();
         }
     }
 }
