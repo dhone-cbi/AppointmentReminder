@@ -52,7 +52,7 @@
             this.btnSendReminders.TabIndex = 0;
             this.btnSendReminders.Text = "Send Reminders";
             this.btnSendReminders.UseVisualStyleBackColor = true;
-            this.btnSendReminders.Click += new System.EventHandler(this.button1_Click);
+            this.btnSendReminders.Click += new System.EventHandler(this.btnSendReminders_Click);
             // 
             // groupBox1
             // 

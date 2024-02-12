@@ -80,7 +80,7 @@ namespace AppointmentReminder
             return list;
         }
 
-        public async void SendReminders(IEnumerable<AppointmentInfo> list)
+        public async Task<IEnumerable<AppointmentInfo>> SendReminders(IEnumerable<AppointmentInfo> list)
         {
             OpenSqlConnection();
             foreach (var item in list)
@@ -92,6 +92,8 @@ namespace AppointmentReminder
                 WriteReminderLog(item);
             }
             CloseSqlConnection();
+
+            return list;
         }
 
 
@@ -140,7 +142,7 @@ namespace AppointmentReminder
                 reminderText = $"Este es un recordatorio que tienes una cita el " +
                     $"{info.AppointmentDate} {info.AppointmentTime} en {info.Address}, {info.City}, " +
                     $"{info.State} {info.Zip}. " +
-                    "No responda a este mensaje . Si necesita cambiar o cancelar su cita, por favor, " +
+                    "No responda a este mensaje. Si necesita cambiar o cancelar su cita, por favor, " +
                     "llame al 1-877-931-9142.";
                 reminderSubject = "Recordatorio de Cita";
 
@@ -195,6 +197,49 @@ namespace AppointmentReminder
             await GraphClient.Users["no_reply@cbridges.com"].SendMail.PostAsync(postRequestBody);
 
             return DateTime.Now;
+        }
+
+        public async void SendReminderReport(IEnumerable<AppointmentInfo> list, IEnumerable<string> recipients)
+        {
+            int sentReminders = list.Count(item => item.ReminderSentTime.HasValue);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("<h1>Appointment Reminder Report</h1>");
+            sb.AppendLine("<p>");
+            sb.AppendLine($"<b>Reminders Sent:</b> {sentReminders}");
+            sb.AppendLine("</p>");
+
+            ItemBody body = new ItemBody
+            {
+                ContentType = BodyType.Html,
+                Content = sb.ToString()
+            };
+
+            Message msg = new Message()
+            {
+                Subject = "Appointment Reminder Report",
+                ToRecipients = new List<Recipient>(
+                    from item in recipients select new Recipient
+                    {
+                        EmailAddress = new EmailAddress { Address = item }
+                    }
+                    ),
+                Sender = new Recipient
+                {
+                    EmailAddress = new EmailAddress { Address = "no_reply@cbridges.com" }
+                },
+                Body = body
+
+            };
+
+            SendMailPostRequestBody postRequestBody = new SendMailPostRequestBody
+            {
+                Message = msg
+            };
+
+            await GraphClient.Users["no_reply@cbridges.com"].SendMail.PostAsync(postRequestBody);
+
         }
     }
 }

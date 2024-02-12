@@ -25,31 +25,13 @@ namespace AppointmentReminderSettings
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void SendReminders()
         {
-            /*AppointmentInfo info = new AppointmentInfo()
-            {
-                AppointmentDate = "2/8/2024",
-                AppointmentTime = "8:00 AM",
-                Language = "Spanish",
-                Address = "1234 Test Ln",
-                City = "Phoenix",
-                State = "AZ",
-                Zip = "85021",
-                CellPhone = "6233129573"
-            };*/
-
-            //reminderEngine.SendReminderEmail(info);
-            //info.ReminderSentTime = DateTime.Now;
-            //reminderEngine.WriteReminderLog(info, null);
-
-            SendReminders();  
-        }
-
-        private void SendReminders()
-        {
+            List<string> recipients = new List<string> { "dneves@cbridges.com", "mallen@cbridges.com",
+                "dhone@cbridges.com"};
             IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
-            appointmentReminderEngine.SendReminders(list);
+            list = await appointmentReminderEngine.SendReminders(list);
+            appointmentReminderEngine.SendReminderReport(list, recipients);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -175,6 +157,11 @@ namespace AppointmentReminderSettings
         {
             timer1.Interval = 24 * 60 * 60 * 1000;
 
+            SendReminders();
+        }
+
+        private void btnSendReminders_Click(object sender, EventArgs e)
+        {
             SendReminders();
         }
     }
