@@ -19,7 +19,7 @@ namespace AppointmentReminder
         public GraphServiceClient GraphClient { get; set; }
 
 
-        private void OpenSqlConnection()
+        public void OpenSqlConnection()
         {
             sqlConnection = new SqlConnection();
             SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
@@ -33,7 +33,7 @@ namespace AppointmentReminder
             sqlConnection.ChangeDatabase("CBIProd");
         }
 
-        private void CloseSqlConnection()
+        public void CloseSqlConnection()
         {
             sqlConnection.Close();
         }
@@ -46,13 +46,13 @@ namespace AppointmentReminder
             info.PersonID = (Guid)reader["person_id"];
             info.AppointmentID = (Guid)reader["appt_id"];
             info.CellPhone = (string)reader["cell_phone"];
-            info.AppointmentDate = (string)reader["appt_date"];
-            info.AppointmentTime = (string)reader["appt_time"];
-            info.Address = (string)reader["address"];
+            info.AppointmentDate = (string)reader["ApptDate"];
+            info.AppointmentTime = (string)reader["ApptTime"];
+            info.Address = (string)reader["address_line_1"];
             info.City = (string)reader["city"];
             info.State = (string)reader["state"];
             info.Zip = (string)reader["zip"];
-            info.Language = (string)reader["language"];
+            info.Language = (string)reader["SpanishSpeaking"];
 
 
             return info;
@@ -103,11 +103,11 @@ namespace AppointmentReminder
             SqlCommand command = sqlConnection.CreateCommand();
             command.Transaction = transaction;
 
-            command.CommandText = "insert into CBI_ApptReminders.dbo.ApptReminderLog (" +
-                "   person_id, appt_id, cell_phone, appt_date, appt_time, address, city, state, zip, language, reminder_sent_time" +
+            command.CommandText = "insert into CBI_ApptReminders.dbo.ApptReminder (" +
+                "   person_id, appt_id, cell_phone, appt_date, ApptTime, address_line_1, city, state, zip, ReminderSentTime" +
                 ")" +
                 "values (" +
-                "   @person_id, @appt_id, @cell_phone, @appt_date, @appt_time, @address, @city, @state, @zip, @language, @reminder_sent_time" +
+                "   @person_id, @appt_id, @cell_phone, @appt_date, @appt_time, @address, @city, @state, @zip, @reminder_sent_time" +
                 ")";
 
             command.Parameters.AddWithValue("person_id", info.PersonID);
@@ -119,7 +119,7 @@ namespace AppointmentReminder
             command.Parameters.AddWithValue("city", info.City);
             command.Parameters.AddWithValue("state", info.State);
             command.Parameters.AddWithValue("zip", info.Zip);
-            command.Parameters.AddWithValue("language", info.Language);
+            //command.Parameters.AddWithValue("language", info.Language);
 
             if (info.ReminderSentTime.HasValue)
                 command.Parameters.AddWithValue("reminder_sent_time", info.ReminderSentTime);

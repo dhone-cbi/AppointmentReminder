@@ -164,5 +164,11 @@ namespace AppointmentReminderSettings
         {
             SendReminders();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
+
+        }
     }
 }
