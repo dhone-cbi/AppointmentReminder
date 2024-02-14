@@ -64,17 +64,56 @@ namespace AppointmentReminderSettings
 
         private void SaveSettings()
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(SettingsKey, true);
 
+            if (key == null)
+                key = Registry.CurrentUser.CreateSubKey(SettingsKey, true);
+
+            key.SetValue("ReportRecipients", ReportRecipients);
+            key.SetValue("SmsGatewayDomain", SmsGatewayDomain);
+
+            key.Close();
         }
 
         private void LoadCredentials()
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey);
 
+            if (key == null)
+                return;
+            else
+            {
+                byte[] applicationIdBytes = (byte[])key.GetValue("ApplicationId");
+                byte[] tenantIdBytes = (byte[])key.GetValue("TenantId");
+                byte[] clientSecretBytes = (byte[])key.GetValue("ClientSecret");
+
+                key.Close();
+
+                byte[] applicationIdDecrypted =
+                    ProtectedData.Unprotect(applicationIdBytes, null, DataProtectionScope.LocalMachine);
+                byte[] tenantIdDecrypted =
+                    ProtectedData.Unprotect(tenantIdBytes, null, DataProtectionScope.LocalMachine);
+                byte[] clientSecretDecrypted =
+                    ProtectedData.Unprotect(clientSecretBytes, null, DataProtectionScope.LocalMachine);
+
+
+                GraphApplicationId = Encoding.Unicode.GetString(applicationIdDecrypted);
+                GraphTenantId = Encoding.Unicode.GetString(tenantIdDecrypted);
+                GraphClientSecret = Encoding.Unicode.GetString(clientSecretDecrypted);
+            }
         }
 
         private void LoadSettings()
         {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(SettingsKey);
 
+            if (key == null) 
+                return;
+            else
+            {
+                ReportRecipients = (string)key.GetValue("ReportRecipients");
+                SmsGatewayDomain = (string)key.GetValue("SmsGatewayDomain");
+            }
         }
 
     }

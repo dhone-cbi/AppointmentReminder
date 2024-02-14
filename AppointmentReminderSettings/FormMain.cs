@@ -4,6 +4,7 @@ using Microsoft.Graph;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -18,11 +19,17 @@ namespace AppointmentReminderSettings
 
         public GraphServiceClient graphClient;
         public AppointmentReminderEngine appointmentReminderEngine;
-        
+        public RegistrySettings Settings = new RegistrySettings();
 
         public FormMain()
         {
             InitializeComponent();
+            Settings.Load();
+            bindingSource1.DataSource = Settings;
+            txtApplicationID.DataBindings.Add("Text", bindingSource1, "GraphApplicationId");
+            txtTenantID.DataBindings.Add("Text", bindingSource1, "GraphTenantId");
+            txtClientSecret.DataBindings.Add("Text", bindingSource1, "GraphClientSecret");
+
         }
 
         private async void SendReminders()
@@ -31,12 +38,14 @@ namespace AppointmentReminderSettings
                 "dhone@cbridges.com"};
             IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
             list = await appointmentReminderEngine.SendReminders(list);
+            var sentList = from item in list where item.ReminderSentTime.HasValue select item;
+            var failedList = from item in list where !item.ReminderSentTime.HasValue select item;
             appointmentReminderEngine.SendReminderReport(list, recipients);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string applicationID = txtApplicationID.Text;
+            /*string applicationID = txtApplicationID.Text;
             string tenantID = txtTenantID.Text;
             string clientSecret = txtClientSecret.Text;
 
@@ -64,7 +73,9 @@ namespace AppointmentReminderSettings
             key.SetValue("TenantID", tenantIdEncrypted);
             key.SetValue("ClientSecret", clientSecretEncrypted);
 
-            key.Close();
+            key.Close();*/
+
+            Settings.Save();
 
             InitializeInterfaces();
         }
@@ -78,7 +89,7 @@ namespace AppointmentReminderSettings
 
         private void btnReload_Click(object sender, EventArgs e)
         {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey);
+            /*RegistryKey key = Registry.CurrentUser.OpenSubKey(GraphCredentialsKey);
 
             if (key == null) 
                 return;
@@ -104,15 +115,19 @@ namespace AppointmentReminderSettings
 
                 txtApplicationID.Text = applicationID;
                 txtTenantID.Text = tenantID;
-                txtClientSecret.Text = clientSecret;
+                txtClientSecret.Text = clientSecret;*/
 
-                InitializeInterfaces();
-            }
+            Settings.Load();
+
+            bindingSource1.ResetBindings(true);
+
+            InitializeInterfaces();
+            //}
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            btnReload_Click(sender, e);
+            //btnReload_Click(sender, e);
 
             InitializeInterfaces();
 
@@ -132,9 +147,9 @@ namespace AppointmentReminderSettings
 
         private void InitializeInterfaces()
         {
-            string applicationID = txtApplicationID.Text;
-            string tenantID = txtTenantID.Text;
-            string clientSecret = txtClientSecret.Text;
+            string applicationID = Settings.GraphApplicationId;
+            string tenantID = Settings.GraphTenantId;
+            string clientSecret = Settings.GraphClientSecret;
 
             try
             {

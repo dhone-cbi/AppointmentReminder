@@ -17,7 +17,7 @@ namespace AppointmentReminderService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new ReminderService()
             };
             ServiceBase.Run(ServicesToRun);
         }

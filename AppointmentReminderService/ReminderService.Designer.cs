@@ -1,6 +1,6 @@
 ﻿namespace AppointmentReminderService
 {
-    partial class Service1
+    partial class ReminderService
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,10 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            this.eventLog = new System.Diagnostics.EventLog();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog)).BeginInit();
+            // 
+            // eventLog
+            // 
+            this.eventLog.Log = "ApptRmdr";
+            this.eventLog.Source = "CBI Appointment Reminder";
+            // 
+            // ReminderService
+            // 
+            this.ServiceName = "ReminderService";
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog)).EndInit();
+
         }
 
         #endregion
+
+        private System.Diagnostics.EventLog eventLog;
     }
 }

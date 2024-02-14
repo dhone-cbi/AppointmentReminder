@@ -85,11 +85,14 @@ namespace AppointmentReminder
             OpenSqlConnection();
             foreach (var item in list)
             {
-                DateTime sentTime = await SendReminderEmail(item);
+                DateTime? sentTime = await SendReminderEmail(item);
 
-                item.ReminderSentTime = sentTime;
+                if (sentTime.HasValue)
+                {
+                    item.ReminderSentTime = sentTime;
 
-                WriteReminderLog(item);
+                    WriteReminderLog(item);
+                }
             }
             CloseSqlConnection();
 
@@ -133,7 +136,7 @@ namespace AppointmentReminder
             return rowsModified;
         }
 
-        public async Task<DateTime> SendReminderEmail(AppointmentInfo info)
+        public async Task<DateTime?> SendReminderEmail(AppointmentInfo info)
         {
             string reminderText;
             string reminderSubject;
@@ -194,7 +197,14 @@ namespace AppointmentReminder
                 Message = msg
             };
 
-            await GraphClient.Users["no_reply@cbridges.com"].SendMail.PostAsync(postRequestBody);
+            try
+            {
+                await GraphClient.Users["no_reply@cbridges.com"].SendMail.PostAsync(postRequestBody);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
             return DateTime.Now;
         }
