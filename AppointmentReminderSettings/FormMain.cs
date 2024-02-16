@@ -179,11 +179,5 @@ namespace AppointmentReminderSettings
         {
             SendReminders();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var list = appointmentReminderEngine.GetAppointments();
-            MessageBox.Show($"{list.Count()}");
-        }
     }
 }
