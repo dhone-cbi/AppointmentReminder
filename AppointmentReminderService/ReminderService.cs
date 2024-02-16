@@ -8,7 +8,11 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using AppointmentReminder;
 using AppointmentReminderSettings;
+using Azure.Identity;
+using Microsoft.Graph;
+using Microsoft.Graph.Models;
 
 namespace AppointmentReminderService
 {
@@ -18,6 +22,8 @@ namespace AppointmentReminderService
         Timer timer;
         EventLog eventLog;
         RegistrySettings settings = new RegistrySettings();
+        GraphServiceClient graphClient;
+        AppointmentReminderEngine appointmentReminderEngine;
 
         public ReminderService()
         {
@@ -48,12 +54,43 @@ namespace AppointmentReminderService
             settings.Load();
 
             eventLog.WriteEntry("Settings loaded successfully.", EventLogEntryType.Information);
+
+            InitializeGraphClient();
         }
 
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        public void InitializeGraphClient()
         {
+            string applicationId = settings.GraphApplicationId;
+            string tenantId = settings.GraphTenantId;
+            string clientSecret = settings.GraphClientSecret;
+
+            try
+            {
+                ClientSecretCredential clientSecretCredential =
+                    new ClientSecretCredential(tenantId, applicationId, clientSecret);
+                graphClient = new GraphServiceClient(clientSecretCredential);
+            }
+            catch (Exception ex)
+            {
+                eventLog.WriteEntry("Could not initialize interfaces. Please check credentials.");
+
+                throw new Exception("Could not initialize interfaces. Please check credentials.", ex);
+            }
+        }
+
+        private async void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            List<string> recipients = new List<string> { "dneves@cbridges.com", "mallen@cbridges.com",
+                "dhone@cbridges.com"};
+
             eventLog.WriteEntry("Timer Elapsed", EventLogEntryType.Information);
             timer.Interval = 24 * 60 * 60 * 1000.0;
+
+            IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
+            list = await appointmentReminderEngine.SendReminders(list);
+            var sentList = from item in list where item.ReminderSentTime.HasValue select item;
+            var failedList = from item in list where !item.ReminderSentTime.HasValue select item;
+            appointmentReminderEngine.SendReminderReport(list, recipients);
         }
 
         protected override void OnStart(string[] args)

@@ -15,7 +15,7 @@ namespace AppointmentReminderService
         /// </summary>
         static void Main()
         {
-            Application.ThreadException += Application_ThreadException;
+            //Application.ThreadException += Application_ThreadException;
 
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
