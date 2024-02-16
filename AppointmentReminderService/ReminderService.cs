@@ -39,7 +39,8 @@ namespace AppointmentReminderService
 
             double interval = (scheduledTime - DateTime.Now).TotalMilliseconds;
 
-            timer.Interval = interval;
+            //timer.Interval = interval;
+            timer.Interval = 30 * 1000.0;
             timer.AutoReset = true;
             timer.Elapsed += TimerElapsed;
 
@@ -69,6 +70,10 @@ namespace AppointmentReminderService
                 ClientSecretCredential clientSecretCredential =
                     new ClientSecretCredential(tenantId, applicationId, clientSecret);
                 graphClient = new GraphServiceClient(clientSecretCredential);
+                appointmentReminderEngine = new AppointmentReminderEngine
+                {
+                    GraphClient = graphClient
+                };
             }
             catch (Exception ex)
             {
@@ -84,13 +89,16 @@ namespace AppointmentReminderService
                 "dhone@cbridges.com"};
 
             eventLog.WriteEntry("Timer Elapsed", EventLogEntryType.Information);
-            timer.Interval = 24 * 60 * 60 * 1000.0;
+            //timer.Interval = 24 * 60 * 60 * 1000.0;
+            timer.Interval = 30 * 1000.0;
 
             IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
-            list = await appointmentReminderEngine.SendReminders(list);
+
+            eventLog.WriteEntry($"Successfully retrieved {list.Count()} appointments", EventLogEntryType.Information);
+            /*list = await appointmentReminderEngine.SendReminders(list);
             var sentList = from item in list where item.ReminderSentTime.HasValue select item;
             var failedList = from item in list where !item.ReminderSentTime.HasValue select item;
-            appointmentReminderEngine.SendReminderReport(list, recipients);
+            appointmentReminderEngine.SendReminderReport(list, recipients);*/
         }
 
         protected override void OnStart(string[] args)
