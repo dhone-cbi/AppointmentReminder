@@ -85,20 +85,24 @@ namespace AppointmentReminderService
 
         private async void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            List<string> recipients = new List<string> { "dneves@cbridges.com", "mallen@cbridges.com",
-                "dhone@cbridges.com"};
-
             eventLog.WriteEntry("Timer Elapsed", EventLogEntryType.Information);
             timer.Interval = 24 * 60 * 60 * 1000.0;
             //timer.Interval = 30 * 1000.0;
 
+            await SendReminders();
+        }
+
+        private async Task SendReminders()
+        {
+            List<string> recipients = new List<string> { "dneves@cbridges.com", "mallen@cbridges.com",
+                "dhone@cbridges.com"};
             IEnumerable<AppointmentInfo> list = appointmentReminderEngine.GetAppointments();
 
             eventLog.WriteEntry($"Successfully retrieved {list.Count()} appointments", EventLogEntryType.Information);
             list = await appointmentReminderEngine.SendReminders(list);
             var sentList = from item in list where item.ReminderSentTime.HasValue select item;
             var failedList = from item in list where !item.ReminderSentTime.HasValue select item;
-            appointmentReminderEngine.SendReminderReport(list, recipients);
+            appointmentReminderEngine.SendReminderReport(sentList, recipients);
         }
 
         protected override void OnStart(string[] args)
