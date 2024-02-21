@@ -29,7 +29,8 @@ namespace AppointmentReminderSettings
             txtApplicationID.DataBindings.Add("Text", bindingSource1, "GraphApplicationId");
             txtTenantID.DataBindings.Add("Text", bindingSource1, "GraphTenantId");
             txtClientSecret.DataBindings.Add("Text", bindingSource1, "GraphClientSecret");
-
+            txtRecipients.DataBindings.Add("Text", bindingSource1, "ReportRecipients");
+            txtSmsGateway.DataBindings.Add("Text", bindingSource1, "SmsGatewayDomain");
         }
 
         private async void SendReminders()
@@ -85,6 +86,8 @@ namespace AppointmentReminderSettings
             txtApplicationID.Clear();
             txtTenantID.Clear();
             txtClientSecret.Clear();
+            txtRecipients.Clear();
+            txtSmsGateway.Clear();
         }
 
         private void btnReload_Click(object sender, EventArgs e)
